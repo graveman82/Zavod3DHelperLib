@@ -1,0 +1,12 @@
+*.[oa]
+*.obj
+*.dll
+*.exe
+*.lib
+*~
+*.layout
+*.depend
+*.ncb
+*.user
+*.res
+
