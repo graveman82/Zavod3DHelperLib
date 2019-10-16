@@ -4,14 +4,29 @@ namespace zvd {
 
 HierNode::HierNode() : next_(0), prev_(0), parent_(0), child_(0) {}
 
+HierNode::~HierNode() {
+    Cleanup();
+}
+
+void HierNode::Cleanup() {
+    Unlink();
+    HierNode* child = child_;
+    while (child != 0) {
+        HierNode* nextChild = child->next_;
+        child->Unlink();
+        child = nextChild;
+    }
+    child_ = 0;
+}
+
 bool HierNode::IsLinked() const { return parent_ != 0; }
 
-HierNode::ErrorReason HierNode::IsAllowedToAppend(HierNode* candidateForChild) {
+HierNode::ErrorReason HierNode::IsAllowedToAppend(HierNode* candidateForChild) const {
     // assert (candidateForChild);
     if (candidateForChild->IsLinked())
         return kER_LINKED;
 
-    HierNode* checkedNode = this;
+    const HierNode* checkedNode = this;
     while (checkedNode != 0) {
         if (checkedNode == candidateForChild)
             return kER_CYCLING;
@@ -43,30 +58,31 @@ void HierNode::Unlink() {
     if (prev_ != 0) {
         prev_->next_ = next_;
     }
-    if (child_ == this) {
-        child_ = next_;
+    //assert(parent_);
+    if (parent_->child_ == this) {
+        parent_->child_ = next_;
     }
     parent_ = 0;
     next_ = prev_ = 0;
 }
 
-HierNode* HierNode::Parent() {
+HierNode* HierNode::Parent() const {
     return parent_;
 }
 
-HierNode* HierNode::FirstChild() {
+HierNode* HierNode::FirstChild() const {
     return child_;
 }
 
-HierNode* HierNode::Next() { return next_; }
+HierNode* HierNode::Next() const { return next_; }
 
-HierNode* HierNode::Prev() { return prev_; }
+HierNode* HierNode::Prev() const { return prev_; }
 
-HierNode* HierNode::Root() {
-    HierNode* root = this;
+HierNode* HierNode::Root() const {
+    const HierNode* root = this;
     while (root->parent_ != 0) {
         root = root->parent_;
     }
-    return root;
+    return const_cast<HierNode*>(root);
 }
 } // end of zvd

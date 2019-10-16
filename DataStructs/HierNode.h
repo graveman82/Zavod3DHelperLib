@@ -21,23 +21,26 @@ protected:
 
 public:
     HierNode();
+    ~HierNode();
+
+    void Cleanup();
 
     bool IsLinked() const;
     /// ¬озвращает kER_OK, если заданный узел может быть присоединен в качестве дочернего.
-    ErrorReason IsAllowedToAppend(HierNode* candidateForChild);
-    /// ѕрисоедин€ет заданный узел в качестве дочернего.
+    ErrorReason IsAllowedToAppend(HierNode* candidateForChild) const;
+    /// ѕрисоедин€ет узел к данному в качестве дочернего.
     ErrorReason Append(HierNode* candidateForChild);
     /// ќтсоедин€ет узел от родительского.
     void Unlink();
 
-    HierNode* Parent();
-    HierNode* FirstChild();
+    HierNode* Parent() const;
+    HierNode* FirstChild() const;
     /// —ледующий в списке дочерних узлов родител€.
-    HierNode* Next();
+    HierNode* Next() const;
     /// ѕредыдущий в списке дочерних узлов родител€.
-    HierNode* Prev();
+    HierNode* Prev() const;
     /// ¬озвращает корневой узел дерева.
-    HierNode* Root();
+    HierNode* Root() const;
 };
 
 } // end of zvd
