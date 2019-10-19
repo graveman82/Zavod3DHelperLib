@@ -15,7 +15,7 @@ namespace zvd {
 //------------------------------------------------------------------------------
 /**
 	@class NodeBase
-    @ingroup DataStructs
+	@ingroup DataStructs
 
 	Базовый интерфейс узла иерархического дерева с возможностью хранения
 	кэшированных данных.
@@ -28,7 +28,7 @@ namespace zvd {
 	public:
 		virtual void UpdateCachedData(unsigned long dirtyBitIndex) {
 			// Обновить матрицу мировой трансформации узла комбинацией
-			//матрицы	его локальной трансформации и матрицы мировой
+			//матрицы его локальной трансформации и матрицы мировой
 			//трансформации родительского узла.
 			//
 		}
@@ -46,28 +46,28 @@ public:
 	virtual ~NodeBase();
 
 	/// Проверка актуальности кэшированных данных.
-    bool Dirty(unsigned long dirtyBitIndex) const;
-    /// Вызывать перед любым запросом кэшированных данных.
-    void Update(unsigned long dirtyBitIndex);
+	bool Dirty(unsigned long dirtyBitIndex) const;
+	/// Вызывать перед любым запросом кэшированных данных.
+	void Update(unsigned long dirtyBitIndex);
 
 	ErrorReason Append(NodeBase* candidateForChild, unsigned long dirtyBitIndex);
-    void Unlink(unsigned long dirtyBitIndex);
+	void Unlink(unsigned long dirtyBitIndex);
 
-    NodeBase* Parent() const;
-    NodeBase* FirstChild() const;
-    NodeBase* Next() const;
-    NodeBase* Prev() const;
-    NodeBase* Root() const;
+	NodeBase* Parent() const;
+	NodeBase* FirstChild() const;
+	NodeBase* Next() const;
+	NodeBase* Prev() const;
+	NodeBase* Root() const;
 
 
 protected:
 	/// Вызвать, когда нарушена актуальность кэшированных данных.
-    void SetDirty(unsigned long dirtyBitIndex);
+	void SetDirty(unsigned long dirtyBitIndex);
 	/// Интерфейс для обновления кэшированных данных.
 	virtual void UpdateCachedData(unsigned long dirtyBitIndex) = 0;
 
 private:
-    void UpdateBranch (unsigned long dirtyBitIndex, bool fForceUpdate = false);
+	void UpdateBranch (unsigned long dirtyBitIndex, bool fForceUpdate = false);
 
 	unsigned long flags_;
 };
@@ -87,7 +87,7 @@ NodeBase::Dirty(unsigned long dirtyBitIndex) const {
 inline
 HierNode::ErrorReason
 NodeBase::Append(NodeBase* candidateForChild, unsigned long dirtyBitIndex) {
-    HierNode::ErrorReason er = HierNode::Append(candidateForChild);
+	HierNode::ErrorReason er = HierNode::Append(candidateForChild);
 	if (kER_OK == er) {
 		SetDirty(dirtyBitIndex);
 	}
@@ -111,7 +111,7 @@ NodeBase::Unlink(unsigned long dirtyBitIndex) {
 inline
 NodeBase*
 NodeBase::Parent() const {
-    return static_cast<NodeBase*>(HierNode::Parent());
+	return static_cast<NodeBase*>(HierNode::Parent());
 }
 
 //------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ NodeBase::Parent() const {
 inline
 NodeBase*
 NodeBase::FirstChild() const {
-    return static_cast<NodeBase*>(HierNode::FirstChild());
+	return static_cast<NodeBase*>(HierNode::FirstChild());
 }
 
 //------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ NodeBase::FirstChild() const {
 inline
 NodeBase*
 NodeBase::Next() const {
-    return static_cast<NodeBase*>(HierNode::Next());
+	return static_cast<NodeBase*>(HierNode::Next());
 }
 
 //------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ NodeBase::Next() const {
 inline
 NodeBase*
 NodeBase::Prev() const {
-    return static_cast<NodeBase*>(HierNode::Prev());
+	return static_cast<NodeBase*>(HierNode::Prev());
 }
 
 //------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ NodeBase::Prev() const {
 inline
 NodeBase*
 NodeBase::Root() const {
-    return static_cast<NodeBase*>(HierNode::Root());
+	return static_cast<NodeBase*>(HierNode::Root());
 }
 
 //------------------------------------------------------------------------------

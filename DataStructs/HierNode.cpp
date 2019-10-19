@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
-//  HierNode.cpp
-//  This file is part of the "Zavod3D Project".
+//	HierNode.cpp
+//	This file is part of the "Zavod3D Project".
 //	For conditions of distribution and use, see copyright notice in LICENSE file.
 //
 //	Copyright (C) 2012-2019 Marat Sungatullin
@@ -25,7 +25,7 @@ HierNode::HierNode() :
 /**
 */
 HierNode::~HierNode() {
-    Cleanup();
+	Cleanup();
 }
 
 //------------------------------------------------------------------------------
@@ -35,14 +35,14 @@ HierNode::~HierNode() {
 */
 void
 HierNode::Cleanup() {
-    Unlink();
-    HierNode* child = child_;
-    while (child != 0) {
-        HierNode* nextChild = child->next_;
-        child->Unlink();
-        child = nextChild;
-    }
-    child_ = 0;
+	Unlink();
+	HierNode* child = child_;
+	while (child != 0) {
+		HierNode* nextChild = child->next_;
+		child->Unlink();
+		child = nextChild;
+	}
+	child_ = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -50,17 +50,17 @@ HierNode::Cleanup() {
 */
 HierNode::ErrorReason
 HierNode::IsAllowedToAppend(HierNode* candidateForChild) const {
-    // assert (candidateForChild);
-    if (candidateForChild->IsLinked())
-        return kER_LINKED;
+	// assert (candidateForChild);
+	if (candidateForChild->IsLinked())
+		return kER_LINKED;
 
-    const HierNode* checkedNode = this;
-    while (checkedNode != 0) {
-        if (checkedNode == candidateForChild)
-            return kER_CYCLING;
-        checkedNode = checkedNode->parent_;
-    }
-    return kER_OK;
+	const HierNode* checkedNode = this;
+	while (checkedNode != 0) {
+		if (checkedNode == candidateForChild)
+			return kER_CYCLING;
+		checkedNode = checkedNode->parent_;
+	}
+	return kER_OK;
 }
 
 //------------------------------------------------------------------------------
@@ -68,18 +68,18 @@ HierNode::IsAllowedToAppend(HierNode* candidateForChild) const {
 */
 HierNode::ErrorReason
 HierNode::Append(HierNode* candidateForChild) {
-    // assert (candidateForChild);
-    ErrorReason er = IsAllowedToAppend(candidateForChild);
-    if (kER_OK != er)
-        return er;
+	// assert (candidateForChild);
+	ErrorReason er = IsAllowedToAppend(candidateForChild);
+	if (kER_OK != er)
+		return er;
 
-    if (child_ != 0) {
-        candidateForChild->next_ = child_;
-        child_->prev_ = candidateForChild;
-    }
-    child_ = candidateForChild;
-    candidateForChild->parent_ = this;
-    return kER_OK;
+	if (child_ != 0) {
+		candidateForChild->next_ = child_;
+		child_->prev_ = candidateForChild;
+	}
+	child_ = candidateForChild;
+	candidateForChild->parent_ = this;
+	return kER_OK;
 }
 
 //------------------------------------------------------------------------------
@@ -87,22 +87,22 @@ HierNode::Append(HierNode* candidateForChild) {
 */
 bool
 HierNode::Unlink() {
-    if (!IsLinked()) {
+	if (!IsLinked()) {
 		return false;
 	}
 
-    if (next_ != 0) {
-        next_->prev_ = prev_;
-    }
-    if (prev_ != 0) {
-        prev_->next_ = next_;
-    }
-    //assert(parent_);
-    if (parent_->child_ == this) {
-        parent_->child_ = next_;
-    }
-    parent_ = 0;
-    next_ = prev_ = 0;
+	if (next_ != 0) {
+		next_->prev_ = prev_;
+	}
+	if (prev_ != 0) {
+		prev_->next_ = next_;
+	}
+	//assert(parent_);
+	if (parent_->child_ == this) {
+		parent_->child_ = next_;
+	}
+	parent_ = 0;
+	next_ = prev_ = 0;
 	return true;
 }
 

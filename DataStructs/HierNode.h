@@ -13,58 +13,58 @@ namespace zvd {
 //------------------------------------------------------------------------------
 /**
 	@class HierNode
-    @ingroup DataStructs
+	@ingroup DataStructs
 
 	Узел иерархического дерева.
 */
 class HierNode {
 public:
 	///
-    enum ErrorReason{
-        kER_OK,
-        kER_LINKED, ///< Узел уже присоединен (у него есть родитель).
-        /** Попытка присоединения узла такая, что приводит к случаю,
-        когда один и тот же узел встречается вверху и внизу своей ветви иерархии.*/
-        kER_CYCLING,
-    };
+	enum ErrorReason{
+		kER_OK,
+		kER_LINKED, ///< Узел уже присоединен (у него есть родитель).
+		/** Попытка присоединения узла такая, что приводит к случаю,
+		когда один и тот же узел встречается вверху и внизу своей ветви иерархии.*/
+		kER_CYCLING,
+	};
 
 	/// Конструктор.
-    HierNode();
+	HierNode();
 	/// Деструктор.
-    virtual ~HierNode();
+	virtual ~HierNode();
 	/// Удаляет все связи узла с другими узлами.
-    void Cleanup();
+	void Cleanup();
 
 	/// Проверяет, присоединен ли уже узел к дереву.
-    bool IsLinked() const;
-    /// Присоединяет узел к данному в качестве дочернего.
-    ErrorReason Append(HierNode* candidateForChild);
-    /// Отсоединяет узел от родительского.
-    bool Unlink();
+	bool IsLinked() const;
+	/// Присоединяет узел к данному в качестве дочернего.
+	ErrorReason Append(HierNode* candidateForChild);
+	/// Отсоединяет узел от родительского.
+	bool Unlink();
 
 	/// Получить родительский узел.
-    HierNode* Parent() const;
+	HierNode* Parent() const;
 	/// Получить первый дочерний узел.
-    HierNode* FirstChild() const;
-    /// Получить следующий в списке дочерних узлов родителя.
-    HierNode* Next() const;
-    /// Получить предыдущий в списке дочерних узлов родителя.
-    HierNode* Prev() const;
-    /// Получить корневой узел дерева.
-    HierNode* Root() const;
+	HierNode* FirstChild() const;
+	/// Получить следующий в списке дочерних узлов родителя.
+	HierNode* Next() const;
+	/// Получить предыдущий в списке дочерних узлов родителя.
+	HierNode* Prev() const;
+	/// Получить корневой узел дерева.
+	HierNode* Root() const;
 
 private:
-    // Следующий и предыдущий узлы, у которых тот же родитель, что и у данного узла.
-    HierNode* next_;
+	// Следующий и предыдущий узлы, у которых тот же родитель, что и у данного узла.
+	HierNode* next_;
 	HierNode* prev_;
 
-    HierNode* parent_;
+	HierNode* parent_;
 	// Первый дочерний узел.
-    HierNode* child_;
+	HierNode* child_;
 
 private:
 	/// Возвращает kER_OK, если заданный узел может быть присоединен в качестве дочернего.
-    ErrorReason IsAllowedToAppend(HierNode* candidateForChild) const;
+	ErrorReason IsAllowedToAppend(HierNode* candidateForChild) const;
 };
 
 //------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ HierNode::IsLinked() const { return parent_ != 0; }
 inline
 HierNode*
 HierNode::Parent() const {
-    return parent_;
+	return parent_;
 }
 
 //------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ HierNode::Parent() const {
 inline
 HierNode*
 HierNode::FirstChild() const {
-    return child_;
+	return child_;
 }
 
 //------------------------------------------------------------------------------
@@ -112,11 +112,11 @@ HierNode::Prev() const { return prev_; }
 inline
 HierNode*
 HierNode::Root() const {
-    const HierNode* root = this;
-    while (root->parent_ != 0) {
-        root = root->parent_;
-    }
-    return const_cast<HierNode*>(root);
+	const HierNode* root = this;
+	while (root->parent_ != 0) {
+		root = root->parent_;
+	}
+	return const_cast<HierNode*>(root);
 }
 
 } // end of zvd

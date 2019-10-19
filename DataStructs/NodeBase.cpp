@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
-//  NodeBase.cpp
-//  This file is part of the "Zavod3D Project".
+//	NodeBase.cpp
+//	This file is part of the "Zavod3D Project".
 //	For conditions of distribution and use, see copyright notice in LICENSE file.
 //	
 //	Copyright (C) 2012-2019 Marat Sungatullin
