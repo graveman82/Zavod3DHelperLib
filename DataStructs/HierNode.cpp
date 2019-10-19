@@ -1,14 +1,40 @@
+//------------------------------------------------------------------------------
+//  HierNode.cpp
+//  This file is part of the "Zavod3D Project".
+//	For conditions of distribution and use, see copyright notice in LICENSE file.
+//
+//	Copyright (C) 2012-2019 Marat Sungatullin
+//------------------------------------------------------------------------------
 #include "DataStructs/HierNode.h"
 
 namespace zvd {
 
-HierNode::HierNode() : next_(0), prev_(0), parent_(0), child_(0) {}
+//------------------------------------------------------------------------------
+/**
+*/
+HierNode::HierNode() :
+	next_(0),
+	prev_(0),
+	parent_(0),
+	child_(0) {
 
+	// empty
+}
+
+//------------------------------------------------------------------------------
+/**
+*/
 HierNode::~HierNode() {
     Cleanup();
 }
 
-void HierNode::Cleanup() {
+//------------------------------------------------------------------------------
+/**
+	Перед вызовом операции необходимо, чтобы указатели на дочерние узлы
+	где-то были сохранены.
+*/
+void
+HierNode::Cleanup() {
     Unlink();
     HierNode* child = child_;
     while (child != 0) {
@@ -19,9 +45,11 @@ void HierNode::Cleanup() {
     child_ = 0;
 }
 
-bool HierNode::IsLinked() const { return parent_ != 0; }
-
-HierNode::ErrorReason HierNode::IsAllowedToAppend(HierNode* candidateForChild) const {
+//------------------------------------------------------------------------------
+/**
+*/
+HierNode::ErrorReason
+HierNode::IsAllowedToAppend(HierNode* candidateForChild) const {
     // assert (candidateForChild);
     if (candidateForChild->IsLinked())
         return kER_LINKED;
@@ -35,7 +63,11 @@ HierNode::ErrorReason HierNode::IsAllowedToAppend(HierNode* candidateForChild) c
     return kER_OK;
 }
 
-HierNode::ErrorReason HierNode::Append(HierNode* candidateForChild) {
+//------------------------------------------------------------------------------
+/**
+*/
+HierNode::ErrorReason
+HierNode::Append(HierNode* candidateForChild) {
     // assert (candidateForChild);
     ErrorReason er = IsAllowedToAppend(candidateForChild);
     if (kER_OK != er)
@@ -46,11 +78,18 @@ HierNode::ErrorReason HierNode::Append(HierNode* candidateForChild) {
         child_->prev_ = candidateForChild;
     }
     child_ = candidateForChild;
+    candidateForChild->parent_ = this;
     return kER_OK;
 }
 
-void HierNode::Unlink() {
-    if (!IsLinked()) return;
+//------------------------------------------------------------------------------
+/**
+*/
+bool
+HierNode::Unlink() {
+    if (!IsLinked()) {
+		return false;
+	}
 
     if (next_ != 0) {
         next_->prev_ = prev_;
@@ -64,25 +103,7 @@ void HierNode::Unlink() {
     }
     parent_ = 0;
     next_ = prev_ = 0;
+	return true;
 }
 
-HierNode* HierNode::Parent() const {
-    return parent_;
-}
-
-HierNode* HierNode::FirstChild() const {
-    return child_;
-}
-
-HierNode* HierNode::Next() const { return next_; }
-
-HierNode* HierNode::Prev() const { return prev_; }
-
-HierNode* HierNode::Root() const {
-    const HierNode* root = this;
-    while (root->parent_ != 0) {
-        root = root->parent_;
-    }
-    return const_cast<HierNode*>(root);
-}
 } // end of zvd

@@ -1,54 +1,56 @@
+//------------------------------------------------------------------------------
+//  NodeBase.cpp
+//  This file is part of the "Zavod3D Project".
+//	For conditions of distribution and use, see copyright notice in LICENSE file.
+//	
+//	Copyright (C) 2012-2019 Marat Sungatullin
+//------------------------------------------------------------------------------
 #include "DataStructs/NodeBase.h"
 
 namespace zvd {
 
-bool NodeBase::Dirty(unsigned long dirtyBitIndex) const {
-	return (flags_ & (1ul << dirtyBitIndex));
+//------------------------------------------------------------------------------
+/**
+*/
+NodeBase::~NodeBase() {
+	// empty
 }
 
-void NodeBase::UpdateTree(unsigned long dirtyBitIndex) {
-	bool fUpdate = false;
-	for (NodeBase* node = this; node != 0; node = node->Parent()) {
+//------------------------------------------------------------------------------
+/**
+	Обновляет кэшированнные данные узлов, начиная с самого верхнего
+	"грязного" узла в ветке, которой принадлежит данный узел.
+*/
+void 
+NodeBase::Update(unsigned long dirtyBitIndex) {
+	NodeBase* dirtyNode = 0;
+	NodeBase* node = this;
+	while (node != 0) {
 		if (node->Dirty(dirtyBitIndex)) {
-			fUpdate = true;
-			break;
+			dirtyNode = node;
 		}
+		node = node->Parent();
 	}
 
-	if (fUpdate)
-		Root()->UpdateHierarchy(dirtyBitIndex);
+	if (dirtyNode != 0)
+		dirtyNode->UpdateBranch(dirtyBitIndex);
 }
 
-void NodeBase::UpdateHierarchy (unsigned long dirtyBitIndex, bool fForceUpdate) {
+//------------------------------------------------------------------------------
+/**
+	Рекурсивное обновление кэшированных данных в ветке, где этот узел - корень.
+*/
+void 
+NodeBase::UpdateBranch (unsigned long dirtyBitIndex, bool fForceUpdate) {
 	if (Dirty(dirtyBitIndex) || fForceUpdate) {
 		//assert (!IsLinked() || !Parent()->Dirty(dirtyBitIndex)); // parent must not be dirty
-		Update(dirtyBitIndex);
+		UpdateCachedData(dirtyBitIndex);
 		flags_ &= ~(1ul << dirtyBitIndex);
 		fForceUpdate = true;
 	}
 	for (NodeBase* child = FirstChild(); child != 0; child = child->Next()) {
-		child->UpdateHierarchy(dirtyBitIndex, fForceUpdate);
+		child->UpdateBranch(dirtyBitIndex, fForceUpdate);
 	}
-}
-
-NodeBase* NodeBase::Parent() const {
-    return static_cast<NodeBase*>(HierNode::Parent());
-}
-
-NodeBase* NodeBase::FirstChild() const {
-    return static_cast<NodeBase*>(HierNode::FirstChild());
-}
-
-NodeBase* NodeBase::Next() const {
-    return static_cast<NodeBase*>(HierNode::Next());
-}
-
-NodeBase* NodeBase::Prev() const {
-    return static_cast<NodeBase*>(HierNode::Prev());
-}
-
-NodeBase* NodeBase::Root() const {
-    return static_cast<NodeBase*>(HierNode::Root());
 }
 
 } // end of zvd
