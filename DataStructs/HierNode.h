@@ -19,7 +19,7 @@ namespace zvd {
 */
 class HierNode {
 public:
-	///
+	/// Причина ошибки.
 	enum ErrorReason{
 		kER_OK,
 		kER_LINKED, ///< Узел уже присоединен (у него есть родитель).
@@ -57,7 +57,7 @@ private:
 	// Следующий и предыдущий узлы, у которых тот же родитель, что и у данного узла.
 	HierNode* next_;
 	HierNode* prev_;
-
+    // Родительский узел.
 	HierNode* parent_;
 	// Первый дочерний узел.
 	HierNode* child_;

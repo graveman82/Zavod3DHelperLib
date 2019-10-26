@@ -2,7 +2,7 @@
 //	NodeBase.cpp
 //	This file is part of the "Zavod3D Project".
 //	For conditions of distribution and use, see copyright notice in LICENSE file.
-//	
+//
 //	Copyright (C) 2012-2019 Marat Sungatullin
 //------------------------------------------------------------------------------
 #include "DataStructs/NodeBase.h"
@@ -21,7 +21,7 @@ NodeBase::~NodeBase() {
 	Обновляет кэшированнные данные узлов, начиная с самого верхнего
 	"грязного" узла в ветке, которой принадлежит данный узел.
 */
-void 
+void
 NodeBase::Update(unsigned long dirtyBitIndex) {
 	NodeBase* dirtyNode = 0;
 	NodeBase* node = this;
@@ -40,8 +40,8 @@ NodeBase::Update(unsigned long dirtyBitIndex) {
 /**
 	Рекурсивное обновление кэшированных данных в ветке, где этот узел - корень.
 */
-void 
-NodeBase::UpdateBranch (unsigned long dirtyBitIndex, bool fForceUpdate) {
+void
+NodeBase::UpdateBranch(unsigned long dirtyBitIndex, bool fForceUpdate) {
 	if (Dirty(dirtyBitIndex) || fForceUpdate) {
 		//assert (!IsLinked() || !Parent()->Dirty(dirtyBitIndex)); // parent must not be dirty
 		UpdateCachedData(dirtyBitIndex);

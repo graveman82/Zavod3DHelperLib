@@ -20,7 +20,7 @@ namespace zvd {
 	Базовый интерфейс узла иерархического дерева с возможностью хранения
 	кэшированных данных.
 
-	Для использования этого класса, создайте производный класс и реализуйте в нем
+	Для использования этого класса создайте производный класс и реализуйте в нем
 	метод UpdateCachedData(). Например:
 	@code
 	// Класс узла графа сцены
@@ -28,8 +28,8 @@ namespace zvd {
 	public:
 		virtual void UpdateCachedData(unsigned long dirtyBitIndex) {
 			// Обновить матрицу мировой трансформации узла комбинацией
-			//матрицы его локальной трансформации и матрицы мировой
-			//трансформации родительского узла.
+			// матрицы его локальной трансформации и матрицы мировой
+			// трансформации родительского узла.
 			//
 		}
 
@@ -67,7 +67,7 @@ protected:
 	virtual void UpdateCachedData(unsigned long dirtyBitIndex) = 0;
 
 private:
-	void UpdateBranch (unsigned long dirtyBitIndex, bool fForceUpdate = false);
+	void UpdateBranch(unsigned long dirtyBitIndex, bool fForceUpdate = false);
 
 	unsigned long flags_;
 };
@@ -78,7 +78,7 @@ private:
 inline
 bool
 NodeBase::Dirty(unsigned long dirtyBitIndex) const {
-	return (flags_ & (1ul << dirtyBitIndex));
+	return (flags_ & (1ul << dirtyBitIndex)) != 0ul;
 }
 
 //------------------------------------------------------------------------------
